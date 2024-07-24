@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "259947009418",
+    "project_id": "devpost-3f3f0",
+    "storage_bucket": "devpost-3f3f0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:259947009418:android:7838a85bb8ec47141c2473",
+        "android_client_info": {
+          "package_name": "com.appredesocial"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmAfxVSfYP1_u0XenERVQCgdtkWc2wwAg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
