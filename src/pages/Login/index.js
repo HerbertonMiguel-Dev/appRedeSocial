@@ -5,10 +5,52 @@ import { Container, Title, Input, Button, ButtonText, SignUpButton, SignUpText, 
 
 function Login(){
   const [login, setLogin] = useState(true)
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+
 
  function toggleLogin(){
   setLogin(!login)
+  setName('')
+  setEmail('')
+  setPassword('')
  }
+
+ function handleSignIn(){
+    if(email === '' && password === ''){
+        alert('Por favor, preencha os campos Email e senha');
+        return
+    }if (email === '') {
+        alert('Por favor, preencha o campo de email.');
+        return;
+    }
+
+    if (password === '') {
+        alert('Por favor, preencha o campo de senha.');
+        return;
+    }
+  }
+
+  function handleSignUp(){
+    if(name === '' && email === '' && password === ''){
+        alert('Por favor, preencha os campos Nome, Email e Senha');
+        return
+    }if (name === '') {
+        alert('Por favor, preencha o campo de Nome.');
+        return;
+    }
+
+    if (email === '') {
+        alert('Por favor, preencha o campo de Email.');
+        return;
+    }
+    if (password === '') {
+        alert('Por favor, preencha o campo de Senha.');
+        return;
+    }
+  }
+
 
 
   if(login){
@@ -19,13 +61,18 @@ function Login(){
           </Title>
         <Input 
           placeholder="Seu email"
+          value={email}
+          onChangeText={ (text)  => setEmail(text) }
         />
 
         <Input 
           placeholder="*********"
+          value={password}
+          onChangeText={ (text) => setPassword(text)}
+          secureTextEntry={true}
         />
 
-        <Button>
+        <Button onPress={handleSignIn}>
           <ButtonText>Acessar</ButtonText>
         </Button>
 
@@ -44,17 +91,24 @@ function Login(){
 
       <Input 
         placeholder="Seu Seu nome"
+        value={name}
+        onChangeText={ (text)  => setName(text) }
       />
 
       <Input 
         placeholder="Seu email"
+        value={email}
+        onChangeText={ (text)  => setEmail(text) }
       />
 
       <Input 
         placeholder="*********"
+        value={password}
+        onChangeText={ (text) => setPassword(text)}
+        secureTextEntry={true}
       />
 
-      <Button>
+      <Button onPress={handleSignUp}>
         <ButtonText>Cadastrar</ButtonText>
       </Button>
 
