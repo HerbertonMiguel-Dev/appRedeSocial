@@ -1,81 +1,80 @@
-import React, { createContext, useState, useEffect } from 'react'
-
+import React, { createContext, useState } from 'react';
 import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore'
-
-import { useNavigation } from '@react-navigation/native';
-
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import firestore from '@react-native-firebase/firestore';
 
 export const AuthContext = createContext({});
 
-function AuthProvider({ children }){
-
+function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loadingAuth, setLoadingAuth] = useState(false);
-  
-  async function signUp(email, password, name){
+
+  async function signUp(email, password, name) {
     setLoadingAuth(true);
 
-    await auth().createUserWithEmailAndPassword(email, password)
-    .then( async (value) =>{
-      let uid = value.user.uid
-      await firestore().collection('users')
-      .doc(uid).set({
+    try {
+      const value = await auth().createUserWithEmailAndPassword(email, password);
+      const uid = value.user.uid;
+
+      await firestore().collection('users').doc(uid).set({
         nome: name,
         createAt: new Date(),
-      })
-      .then(() =>{
-        let data = {
-          uid: uid,
-          nome: name,
-          email: value.user.email
-        }
+      });
 
-        setUser(data);
-        setLoadingAuth(false);
-      })
-    })
-    .catch(() =>{
-      alert('usuario não cadastrado')
+      const data = {
+        uid,
+        nome: name,
+        email: value.user.email,
+      };
+
+      setUser(data);
+    } catch (error) {
+      console.error('Erro durante o cadastro:', error);  // Adicionado para depuração
+      handleAuthError(error);
+    } finally {
       setLoadingAuth(false);
-    })
+    }
   }
 
-  async function signIn(email, password){
+  async function signIn(email, password) {
     setLoadingAuth(true);
-    await auth().signInWithEmailAndPassword(email, password)
-    .then(async(value) =>{
-      let uid = value.user.uid;
 
-      const userProfile = await firestore().collection('users')
-      .doc(uid).get();
+    try {
+      const value = await auth().signInWithEmailAndPassword(email, password);
+      const uid = value.user.uid;
 
-      let data = {
-        uid: uid,
+      const userProfile = await firestore().collection('users').doc(uid).get();
+      const data = {
+        uid,
         nome: userProfile.data().nome,
-        email: value.user.email
-      }
+        email: value.user.email,
+      };
 
-      setUser(data)
+      setUser(data);
+    } catch (error) {
+      console.error('Erro durante o login:', error);  // Adicionado para depuração
+      handleAuthError(error);
+    } finally {
       setLoadingAuth(false);
-
-    })
-    .catch(() =>{
-      alert('login falhou')
-      setLoadingAuth(false);
-    })
+    }
   }
 
+  function handleAuthError(error) {
+    console.error('Código de erro:', error.code);  // Adicionado para depuração
 
-  return(
-    <AuthContext.Provider value={{ signed: !! user, signUp, signIn, loadingAuth }}>
+    switch (error.code) {
+      case 'auth/invalid-credential':
+        alert('As credenciais fornecidas são inválidas.');
+        break;
+      default:
+        alert('Ocorreu um erro desconhecido. Por favor, tente novamente.');
+    }
+  }
+
+  return (
+    <AuthContext.Provider value={{ signed: !!user, signUp, signIn, loadingAuth }}>
       {children}
     </AuthContext.Provider>
-  )
-  
+  );
 }
-
 
 export default AuthProvider;
