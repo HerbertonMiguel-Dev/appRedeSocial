@@ -1,13 +1,17 @@
-import React, {useState} from 'react'
+import React, {useState, useContext} from 'react'
 import { View, Text } from 'react-native'
 
 import { Container, Title, Input, Button, ButtonText, SignUpButton, SignUpText, TitleSenac } from './styles'
+
+import {AuthContext} from '../../contexts/auth'
 
 function Login(){
   const [login, setLogin] = useState(true)
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+
+  const { signUp } = useContext(AuthContext) 
 
 
  function toggleLogin(){
@@ -32,7 +36,7 @@ function Login(){
     }
   }
 
-  function handleSignUp(){
+  async function handleSignUp(){
     if(name === '' && email === '' && password === ''){
         alert('Por favor, preencha os campos Nome, Email e Senha');
         return
@@ -49,6 +53,8 @@ function Login(){
         alert('Por favor, preencha o campo de Senha.');
         return;
     }
+
+    await signUp(email, password, name)
   }
 
 
