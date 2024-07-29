@@ -72,7 +72,7 @@ function Login() {
     return (
       <Container>
         <Title>
-          Dev<Text style={{ color: "#F7921C" }}>Post</Text>
+          Dev<Text style={{fontStyle: 'italic', color: "#F7921C" }}>Post</Text>
           <Text style={{ color: "#004B8C", fontSize: 75 }}> Senac</Text>
         </Title>
         <Input
