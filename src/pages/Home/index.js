@@ -20,6 +20,10 @@ function Home(){
   const [posts, setPosts] = useState([])
   const [loading, setLoading] = useState(true)
 
+  const [loadingRefresh, setLoadingRefresh] = useState (false)
+  const [lastItem, setLastItem] = useState('')
+  const [emptyList, setEmptyList] = useState(false)
+
   useFocusEffect(
     useCallback( () => {
       let isActive = true;
@@ -42,7 +46,9 @@ function Home(){
               })
             })
 
+            setEmptyList(!!snapshot.empty)
             setPosts(postList)
+            setLastItem(snapshot.docs[snapshot.docs.length - 1])
             setLoading(false)
           }
         })
@@ -55,6 +61,35 @@ function Home(){
       }
     },[])
   )
+
+  async function handleRefreshPosts() {
+    setLoadingRefresh(true)
+
+    firestore().collection('posts')
+        .orderBy('created', 'desc')
+        .limit(5)
+        .get()
+        .then((snapshot) =>{
+          
+            setPosts([]);
+            const postList = []
+
+            snapshot.docs.map( u =>{
+              postList.push({
+                ...u.data(),
+                id: u.id,
+              })
+            })
+
+            setEmptyList(false)
+            setPosts(postList)
+            setLastItem(snapshot.docs[snapshot.docs.length - 1])
+            setLoading(false)
+  
+        })
+
+        setLoadingRefresh(false)
+  }
 
   return(
     <Container>
@@ -74,6 +109,8 @@ function Home(){
             userId={user?.uid}
           />
           )}
+          refreshing={loadingRefresh}
+          onRefresh={handleRefreshPosts}
         />
       )}
 
