@@ -110,7 +110,7 @@ function Login() {
       </Title>
 
       <Input
-        placeholder="Seu Seu nome"
+        placeholder="Seu nome"
         value={name}
         onChangeText={(text) => setName(text)}
       />
