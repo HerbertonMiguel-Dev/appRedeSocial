@@ -9,7 +9,7 @@ export const Container = styled.View`
 export const Input = styled.TextInput`
   background-color: transparent;
   margin: 10px;
-  color: #fff;
+  color: #000;
   font-size: 20px;
 `;
 

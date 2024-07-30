@@ -65,12 +65,12 @@ function NewPost(){
   return(
     <Container>
       <Input 
-        placeholder="o que está acontecendo"
+        placeholder="o que está acontecendo?"
         value={post}
         onChangeText={ text => setPost(text)}
         autoCorrect={false}
         multiline={true}
-        placeholderTextColor="#fff"
+        placeholderTextColor="#000"
         maxLength={300}
       />
     </Container>
