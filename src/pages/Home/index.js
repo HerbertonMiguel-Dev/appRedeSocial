@@ -100,7 +100,7 @@ function Home(){
 
     if(loading) return;
     firestore().collection('posts')
-    orderBy.apply('created', 'desc')
+    .orderBy('created', 'desc')
     .limit(5)
     .startAfter(lastItem)
     .get()

@@ -40,7 +40,7 @@ function StackRoutes(){
           title: 'Novo Post',
           headerTintColor: '#fff',
           headerStyle:{
-            backgroundColor: '#F7921C '
+            backgroundColor: '#F7921C'
           }
         }}
       />
