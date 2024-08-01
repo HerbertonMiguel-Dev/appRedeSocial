@@ -5,7 +5,7 @@ import { Text, ActivityIndicator, View } from 'react-native'
 import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import Feather from 'react-native-vector-icons/Feather'
 import { AuthContext} from '../../contexts/auth'
-import firestore from '@react-native-firebase/firestore'
+import firestore, { orderBy } from '@react-native-firebase/firestore'
 
 import { Container, ButtonPost, ListPosts } from './styles'
 
@@ -91,6 +91,38 @@ function Home(){
         setLoadingRefresh(false)
   }
 
+
+  async function getListPost(){
+    if(emptyList){
+      setLoading(false)
+      return null
+    }
+
+    if(loading) return;
+    firestore().collection('posts')
+    orderBy.apply('created', 'desc')
+    .limit(5)
+    .startAfter(lastItem)
+    .get()
+    .then( (snapshot) =>{
+      const postList = []
+      
+      snapshot.docs.map( u => {
+        postList.push({
+          ...u.data(),
+          id: u.id,
+        
+        })
+      })
+
+      setEmptyList(!!snapshot.empty)
+      setLastItem(snapshot.docs[snapshot.docs.length - 1])
+      setPosts(oldPosts => [...oldPosts, ...postList])
+      setLoading(false);
+    })
+
+  }
+
   return(
     <Container>
       <Header />
@@ -111,6 +143,9 @@ function Home(){
           )}
           refreshing={loadingRefresh}
           onRefresh={handleRefreshPosts}
+
+          onEndReached={ () => getListPost() }
+          onEndReachedThreshold={0.1}
         />
       )}
 
