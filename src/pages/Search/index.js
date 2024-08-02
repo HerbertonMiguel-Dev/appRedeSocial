@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from 'react'
-import { View, Text } from 'react-native'
+import React, { useState, useEffect } from 'react';
+import { View, Text } from 'react-native';
 
 import firestore from '@react-native-firebase/firestore';
 
 import Feather from 'react-native-vector-icons/Feather'
 import { Container, AreaInput, Input, List } from './styles'
 
+import SearchList from '../../components/SearchList';
+
 function Search(){
-  const [input, setInput] = useState('')
-  const [users, setUsers ] = useState ([])
+  const [input, setInput] = useState('');
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
     if(input === '' || input === undefined){
@@ -44,20 +46,24 @@ function Search(){
   return(
     <Container>
       <AreaInput>
-        <Feather 
-          name='search'
-          size={20} 
+        <Feather
+          name="search"
+          size={20}
           color="#004B8C"
         />
-        <Input 
-          placeholder="Procurando Usuario?"
+        <Input
+          placeholder="Procurando alguem?"
           value={input}
-          onChangeText={ (text) => setInput(text)}
+          onChangeText={ (text) =>  setInput(text) }
           placeholderTextColor="#353840"
-
         />
-
       </AreaInput>
+
+      <List
+        data={users}
+        renderItem={ ({item}) => <SearchList data={item} /> }
+      />
+
     </Container>
   )
 }
