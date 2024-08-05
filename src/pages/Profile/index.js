@@ -1,6 +1,11 @@
 import React, { useContext, useState } from 'react';
 import { View, Text, Modal, Platform } from 'react-native';
 
+import { launchImageLibrary } from 'react-native-image-picker'
+
+import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
+
 import { AuthContext } from '../../contexts/auth'
 import Header from '../../components/Header'
 import {
@@ -20,7 +25,7 @@ import {
 import Feather from 'react-native-vector-icons/Feather'
 
 function Profile(){
-  const { signOut, user } = useContext(AuthContext);
+  const { signOut, user, setUser, storageUser } = useContext(AuthContext);
 
   const [nome, setNome] = useState(user?.nome)
   const [url, setUrl] = useState(null);
@@ -31,7 +36,103 @@ function Profile(){
   }
 
   async function updateProfile(){
+    if(nome === ''){
+      return;
+    }
+
+    await firestore().collection('users')
+    .doc(user?.uid)
+    .update({
+      nome: nome
+    })
+
+    //Buscar todos posts desse user e atualizar o nome dele
+    const postDocs = await firestore().collection('posts')
+    .where('userId', '==', user?.uid).get();
+
+    //Percorrer todos posts desse user e atualizar.
+    postDocs.forEach( async doc => {
+      await firestore().collection('posts').doc(doc.id)
+      .update({
+        autor: nome
+      })
+    })
+
+
+    let data = {
+      uid: user.uid,
+      nome: nome,
+      email: user.email,
+    }
     
+    setUser(data);
+    storageUser(data);
+    setOpen(false);
+
+  }
+
+  const uploadFile = () => {
+    const options = {
+      noData: true,
+      mediaType: 'photo'
+    };
+
+    launchImageLibrary(options, response => {
+      if(response.didCancel){
+        console.log("Cancelouu!");
+      }else if(response.error){
+        console.log("Ops parece que deu algum erro")
+      }else{
+        uploadFileFirebase(response)
+        .then(() => {
+          uploadAvatarPosts();
+        })
+
+        console.log("URI DA FOTO ", response.assets[0].uri)
+        setUrl(response.assets[0].uri)
+
+      }
+    })
+
+  }
+
+  const getFileLocalPath = (response) => {
+   // extrair e retornar a url da foto.
+   return response.assets[0].uri;
+  }
+
+  const uploadFileFirebase = async (response) => {
+    const fileSource = getFileLocalPath(response);
+    
+    const storageRef = storage().ref('users').child(user?.uid);
+
+    return await storageRef.putFile(fileSource)
+
+  }
+
+
+  const uploadAvatarPosts = async () => {
+    const storageRef = storage().ref('users').child(user?.uid);
+    const url = await storageRef.getDownloadURL()
+    .then(async (image) => {
+      console.log("URL RECEBIDA", image)
+
+      // Atualizar todas iamgens dos posts desse user
+      const postDocs = await firestore().collection('posts')
+      .where('userId', '==', user.uid).get();
+
+      //Percorrer todos posts e trocar a url da imagem.
+      postDocs.forEach( async doc => {
+        await firestore().collection('posts').doc(doc.id).update({
+          avatarUrl: image
+        })
+      })
+
+    })
+    .catch((error)=>{
+      console.log("ERROR AO ATUALIZAR FOTO DOS POSTS ", error)
+    })
+
   }
 
   return(
@@ -39,14 +140,14 @@ function Profile(){
       <Header/> 
 
       { url ? (
-        <UploadButton onPress={ () => alert("CLICOU 1") }>
+        <UploadButton onPress={ () => uploadFile() }>
           <UploadText>+</UploadText>
           <Avatar
             source={{ uri: url }}
           />
         </UploadButton>
       ) : (
-        <UploadButton onPress={ () => alert("CLICOU 2") }>
+        <UploadButton onPress={ () => uploadFile() }>
           <UploadText>+</UploadText>
         </UploadButton>
       )}
