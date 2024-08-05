@@ -13,6 +13,10 @@ import {
 
 import { AuthContext } from "../../contexts/auth";
 
+import * as Animatable from 'react-native-animatable';
+
+const TitleAnimated = Animatable.createAnimatableComponent(Title)
+
 function Login() {
   const [login, setLogin] = useState(true);
   const [name, setName] = useState("");
@@ -71,10 +75,10 @@ function Login() {
   if (login) {
     return (
       <Container>
-        <Title>
+        <TitleAnimated animation="flipInY">
           Dev<Text style={{fontStyle: 'italic', color: "#F7921C" }}>Post</Text>
           <Text style={{ color: "#004B8C", fontSize: 75 }}> Senac</Text>
-        </Title>
+        </TitleAnimated>
         <Input
           placeholder="Seu email"
           value={email}
@@ -104,10 +108,10 @@ function Login() {
 
   return (
     <Container>
-      <Title>
+      <TitleAnimated animation="flipInX">
         Dev<Text style={{ color: "#F7921C" }}>Post</Text>
         <Text style={{ color: "#004B8C", fontSize: 75 }}> Senac</Text>
-      </Title>
+      </TitleAnimated>
 
       <Input
         placeholder="Seu nome"

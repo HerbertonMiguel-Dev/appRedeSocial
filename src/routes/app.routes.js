@@ -93,6 +93,16 @@ function AppRoutes(){
         }
       }}
       />
+
+      {/* <Tab.Screen 
+        name="NewPost" 
+        component={NewPost}
+        options={{
+          tabBarIcon: ({ color, size }) => {
+            return <Feather name="message-circle" color={color} size={size} />
+          }
+        }}
+      /> */}
     </Tab.Navigator>
   )
 }

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, Modal, Platform } from 'react-native';
 
 import { launchImageLibrary } from 'react-native-image-picker'
@@ -30,6 +30,26 @@ function Profile(){
   const [nome, setNome] = useState(user?.nome)
   const [url, setUrl] = useState(null);
   const [open, setOpen] = useState(false);
+
+  useEffect(()=>{
+    let isActive = true;
+
+    async function loadAvatar(){
+      try{
+        if(isActive){
+          let response = await storage().ref('users').child(user?.uid).getDownloadURL();
+          setUrl(response);
+        }
+      }catch(err){
+        console.log("NAO ENCONTRAMOS NENHUMA FOTO")
+      }
+    }
+
+    loadAvatar();
+
+
+    return () => isActive = false;
+  }, [])
 
   async function handleSignOut(){
     await signOut();
