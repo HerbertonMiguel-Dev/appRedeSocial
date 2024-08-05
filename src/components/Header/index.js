@@ -7,7 +7,7 @@ function Header(){
     <Container>
       <Title>
           Dev<Text style={{fontStyle: 'italic', color: "#F7921C" }}>Post</Text>
-          <Text style={{ color: "#004B8C", fontSize: 45 }}> Senac</Text>
+          <Text style={{ color: "#004B8C", fontSize: 35 }}> Senac</Text>
         </Title>
     </Container>
   )

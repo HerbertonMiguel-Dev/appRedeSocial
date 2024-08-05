@@ -7,16 +7,16 @@ export const Container = styled.SafeAreaView`
   background-color: #FBC07E;
   align-items: center;
   justify-content: center;
-  padding-top: 15px;
+  padding-top: 5px;
   border-bottom-width: 1px;
-  border-bottom-color: #FBC07E;
+  border-bottom-color: #004B8C ;
 
 `;
 
 export const Title = styled.Text`
   font-size: 27px;
   font-weight: bold;
-  padding-bottom: 15px;
+  padding-bottom: 5px;
   color: #fff;
 `;
 
