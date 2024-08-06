@@ -8,13 +8,16 @@ import Profile from '../pages/Profile';
 import Search from '../pages/Search';
 import NewPost from '../pages/NewPost';
 import PostsUser from '../pages/PostsUser'
+import ChatRoom from '../pages/ChatRoom';
+import Messages from '../pages/Messages';
+import SearchGroup from '../pages/SearchGroup';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 function StackRoutes(){
   return(
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName="Home">
       <Stack.Screen 
         name ="Home" 
         component={Home}
@@ -42,6 +45,14 @@ function StackRoutes(){
           headerStyle:{
             backgroundColor: '#F7921C'
           }
+        }}
+      />
+
+      <Stack.Screen 
+        name="ChatRoom"
+        component={ChatRoom}
+        options={{
+          headerShown: false
         }}
       />
     </Stack.Navigator>
@@ -94,15 +105,15 @@ function AppRoutes(){
       }}
       />
 
-      {/* <Tab.Screen 
-        name="NewPost" 
-        component={NewPost}
+       <Tab.Screen 
+        name="ChatRoom" 
+        component={ChatRoom}
         options={{
           tabBarIcon: ({ color, size }) => {
             return <Feather name="message-circle" color={color} size={size} />
           }
         }}
-      /> */}
+      /> 
     </Tab.Navigator>
   )
 }
