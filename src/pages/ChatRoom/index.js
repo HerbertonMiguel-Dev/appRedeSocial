@@ -1,5 +1,5 @@
 import React,{ useContext, useState, useEffect } from 'react';
-import { Modal, ActivityIndicator,FlatList} from 'react-native';
+import { Modal, ActivityIndicator, FlatList, Alert} from 'react-native';
 
 import { AuthContext} from '../../contexts/auth'
 import { useNavigation, useIsFocused } from '@react-navigation/native';
@@ -32,6 +32,7 @@ export default function ChatRoom() {
     await signOut();
     
   }
+  
 
   useEffect(()=>{
     let isActive = true;
@@ -55,7 +56,7 @@ export default function ChatRoom() {
         if(isActive){
           setThreads(threads);
           setLoading(false);
-          console.log(threads)
+          //console.log(threads)
         }
 
 
@@ -72,12 +73,44 @@ export default function ChatRoom() {
 
   }, [isFocused, updateScreen]);
 
-  if(loading){
+
+  function deleteRoom(ownerId, idRoom){
+    // Se o cara que está tentando deletar nao é dono dessa sala.
+    if(ownerId !== user?.uid) return;
+
+    Alert.alert(
+      "Atenção!",
+      "Você tem certeza que deseja deletar essa sala?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => {},
+          style: "cancel"
+        },
+        {
+          text: "OK",
+          onPress: () => handleDeleteRoom(idRoom)
+        }
+      ]
+    )
+
+  }
+
+  async function handleDeleteRoom(idRoom){
+    await firestore()
+    .collection('MESSAGE_THREADS')
+    .doc(idRoom)
+    .delete();
+
+    setUpdateScreen(!updateScreen);
+
+  }
+
+   if(loading){
     return(
       <ActivityIndicator  size={20} color="#fff"/>
     )
   }
-
 
  return (
   
@@ -99,7 +132,7 @@ export default function ChatRoom() {
         keyExtractor={ item => item._id}
         showsVerticalScrollIndicator={false}
         renderItem={ ({ item }) => (
-          <ChatList data={item} />
+          <ChatList data={item} deleteRoom={ () => deleteRoom(item.owner, item._id) }/>
       )}
      />
 

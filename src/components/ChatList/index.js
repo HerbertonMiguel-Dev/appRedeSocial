@@ -9,9 +9,9 @@ import {
   ContentText,
 } from './styles'
 
-function ChatList({ data }){
+function ChatList({ data, deleteRoom }){
   return(
-    <Button>
+    <Button onPress={ () => {} }  onLongPress={ () => deleteRoom && deleteRoom() }>
       <Row>
         <Content>
           <Header>
