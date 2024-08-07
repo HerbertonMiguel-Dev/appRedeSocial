@@ -9,9 +9,18 @@ import {
   ContentText,
 } from './styles'
 
+import { useNavigation } from '@react-navigation/native'
+
 function ChatList({ data, deleteRoom }){
+  const navigation = useNavigation();
+
+  function openChat(){
+    
+      navigation.navigate("Messages", { thread: data })
+    }
+
   return(
-    <Button onPress={ () => {} }  onLongPress={ () => deleteRoom && deleteRoom() }>
+    <Button onPress={ openChat }  onLongPress={ () => deleteRoom && deleteRoom() }>
       <Row>
         <Content>
           <Header>
