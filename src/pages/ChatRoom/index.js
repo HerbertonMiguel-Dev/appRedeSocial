@@ -121,7 +121,7 @@ export default function ChatRoom() {
         <Title>Grupos</Title>
       </HeaderRoomLeft>
       
-      <ButtonSearch>
+      <ButtonSearch onPress={ () => navigation.navigate("SearchGroup") }>
         <MaterialIcons name="search" size={28} color="#FFF"/>
       </ButtonSearch>
      </HeaderRoom>

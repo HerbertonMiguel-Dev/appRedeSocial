@@ -1,18 +1,29 @@
-import React from 'react';
-import { View, Text, StyleSheet} from 'react-native';
+import React, { useState } from 'react';
+
+import { Container, ContainerInput, Input, ButtonSearch,  } from './styles';
+
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+
+import Header from '../../components/Header';
 
 export default function SearchGroup() {
+  const [input, setInput] = useState('');
+
  return (
-   <View style={styles.container}>
-     <Text>Tela Procurar</Text>
-   </View>
+   <Container>
+    <Header />
+    <ContainerInput>
+      <Input 
+        placeholder="Digite o nome da sala?"
+        value={input}
+        onChangeText={ (text) => setInput(text) }
+        autoCapitalize={"none"}
+      />
+      <ButtonSearch>
+        <MaterialIcons name="search" size={30} color="#FFF" />
+      </ButtonSearch>
+    </ContainerInput>
+     
+   </Container>
   );
 }
-
-const styles = StyleSheet.create({
-  container:{
-    flex:1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
-})

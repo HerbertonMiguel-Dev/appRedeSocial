@@ -68,6 +68,12 @@ function ChatStack() {
           headerShown: false
         })}
       />
+
+      <Stack.Screen 
+        name="SearchGroup"
+        component={SearchGroup}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 }
