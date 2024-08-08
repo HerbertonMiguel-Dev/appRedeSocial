@@ -55,6 +55,15 @@ function StackRoutes(){
           headerShown: false
         }}
       />
+
+      <Stack.Screen
+        name="Messages"
+        component={Messages}
+        options={ ({ route }) => ({
+          headerShown: false,
+          title: route.params.thread.name
+        })}
+      />
     </Stack.Navigator>
   )
 }
