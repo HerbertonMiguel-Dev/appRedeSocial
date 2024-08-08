@@ -1,4 +1,4 @@
-import React,{ useContext, useState, useEffect } from 'react';
+import React from 'react';
 
 import {
   Button,
@@ -9,13 +9,21 @@ import {
   ContentText,
 } from './styles'
 
+import { useNavigation } from '@react-navigation/native'
+
 function ChatList({ data, deleteRoom }){
+  const navigation = useNavigation();
+
+  function openChat(){
+    navigation.navigate("Messages", { thread: data })
+  }
+
   return(
-    <Button onPress={ () => {} }  onLongPress={ () => deleteRoom && deleteRoom() }>
+    <Button onPress={ openChat }  onLongPress={ () => deleteRoom && deleteRoom() }>
       <Row>
         <Content>
           <Header>
-            <NameText numberOfLines={1}>{data.name}</NameText>
+            <NameText numberOfLines={1}>{data.name} heheh</NameText>
           </Header>
 
           <ContentText numberOfLines={1}>{data.lastMessage.text}</ContentText>

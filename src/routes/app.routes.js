@@ -47,16 +47,29 @@ function StackRoutes(){
           }
         }}
       />
+    </Stack.Navigator>
+  )
+}
 
+function ChatStack() {
+  return (
+    <Stack.Navigator>
       <Stack.Screen 
         name="ChatRoom"
         component={ChatRoom}
-        options={{
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen 
+        name="Messages"
+        component={Messages}
+        options={({ route }) => ({
+          title: route.params?.thread?.name ?? 'Mensagens',
+          headerTintColor: '#fff',
           headerShown: false
-        }}
+        })}
       />
     </Stack.Navigator>
-  )
+  );
 }
 
 
@@ -107,7 +120,7 @@ function AppRoutes(){
 
        <Tab.Screen 
         name="ChatRoom" 
-        component={ChatRoom}
+        component={ChatStack}
         options={{
           tabBarIcon: ({ color, size }) => {
             return <Feather name="message-circle" color={color} size={size} />
