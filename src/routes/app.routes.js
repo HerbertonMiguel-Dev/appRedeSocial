@@ -119,7 +119,7 @@ function AppRoutes(){
       />
 
        <Tab.Screen 
-        name="ChatRoom" 
+        name="Chat" 
         component={ChatStack}
         options={{
           tabBarIcon: ({ color, size }) => {

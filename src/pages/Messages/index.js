@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, FlatList, KeyboardAvoidingView, Platform, TouchableOpacity} from 'react-native';
 
 import {Container, StyledFlatList,ContainerInput, MainContainerInput,StyledTextInput, ButtonContainer  } from './styles'
 
+import { AuthContext } from "../../contexts/auth";
 import { useNavigation } from '@react-navigation/native'
 
-import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
 import ChatMessage from '../../components/ChatMessage';
@@ -19,7 +19,7 @@ export default function Messages({ route }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
 
-  const user = auth().currentUser.toJSON();
+ const { user } = useContext(AuthContext);
 
   useEffect(() => {
 
@@ -41,7 +41,7 @@ export default function Messages({ route }) {
           if(!firebaseData.system){
             data.user = {
               ...firebaseData.user,
-              name: firebaseData.user.displayName
+              name: firebaseData.user.nome
             }
           }
 
@@ -59,6 +59,39 @@ export default function Messages({ route }) {
 
   }, []);
 
+  async function handleSend(){
+    if(input === '') return;
+
+    await firestore()
+    .collection('MESSAGE_THREADS')
+    .doc(thread._id)
+    .collection('MESSAGES')
+    .add({
+      text: input,
+      createdAt: firestore.FieldValue.serverTimestamp(),
+      user: {
+        _id: user.uid,
+        nome: user.nome,
+      },
+    })
+
+    await firestore()
+    .collection('MESSAGE_THREADS')
+    .doc(thread._id)
+    .set(
+      {
+        lastMessage: {
+          text: input,
+          createdAt: firestore.FieldValue.serverTimestamp(),
+        }
+      },
+      { merge: true }
+    )
+
+    setInput('');
+
+  }
+
  return (
    <Container >
     <Header />
@@ -67,6 +100,7 @@ export default function Messages({ route }) {
         data={messages}
         keyExtractor={ item => item._id}
         renderItem={ ({item}) => <ChatMessage data={item} />  }
+        inverted={true}
       />
 
       <KeyboardAvoidingView 
@@ -88,7 +122,7 @@ export default function Messages({ route }) {
           />
         </MainContainerInput>
 
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleSend}>
           <ButtonContainer>
             <Feather name="send" size={22} color="#FFF"/>
           </ButtonContainer>

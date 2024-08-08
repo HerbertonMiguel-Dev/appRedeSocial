@@ -23,7 +23,7 @@ function ChatList({ data, deleteRoom }){
       <Row>
         <Content>
           <Header>
-            <NameText numberOfLines={1}>{data.name} heheh</NameText>
+            <NameText numberOfLines={1}>{data.name}</NameText>
           </Header>
 
           <ContentText numberOfLines={1}>{data.lastMessage.text}</ContentText>
