@@ -11,7 +11,7 @@ function ChatMessage({ data, }) {
     return data?.user?._id === user.uid;
   }, [data]);
 
-   console.log('Display Name:', data?.user?.nome);
+   //console.log('Display Name:', data?.user?.nome);
 
   return (
     <View style={styles.container}>

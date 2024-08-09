@@ -1,7 +1,6 @@
 import styled from "styled-components/native";
 
 export const Container = styled.SafeAreaView`
-  padding-top: 14px;
   flex:1;
   background-color: #FBC07E;
 `;
@@ -9,7 +8,7 @@ export const Container = styled.SafeAreaView`
 export const AreaInput = styled.View`
   flex-direction: row;
   align-items: center;
-  background-color: #F1f1f1;
+  background-color: #e3e3e3;
   margin: 10px;
   border-radius: 4px;
   padding: 5px 10px;
@@ -17,7 +16,7 @@ export const AreaInput = styled.View`
 
 export const Input = styled.TextInput`
   width: 90%;
-  background-color: #F1f1f1; 
+  background-color: #e3e3e3; 
   height: 40px;
   padding-left: 8px;
   font-size: 17px;
